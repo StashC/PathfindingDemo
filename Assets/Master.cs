@@ -50,12 +50,26 @@ public class Master : MonoBehaviour {
     }
 
     void setStartNode(Node startNode) {
+        if(start != null) {
+            Node old = _theGrid.getNodeFromList(start);
+            old.canChangeColor = true;
+            old.changeColor(defaultColor);
+        }
+
+        this.start = startNode.XYPos;
         _theGrid.setStartNode(startNode);
         startNode.changeColor(startColor);
         startNode.canChangeColor = false;
     }
 
     void setTargetNode(Node targetNode) {
+        if(target != null) {
+            Node old = _theGrid.getNodeFromList(target);
+            old.canChangeColor = true;
+            old.changeColor(defaultColor);
+        }
+
+        this.target = targetNode.XYPos;
         _theGrid.setTargetNode(targetNode);
         targetNode.changeColor(targetColor);
         targetNode.canChangeColor = false;

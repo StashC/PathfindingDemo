@@ -1,0 +1,48 @@
+.toolbar-icon-button {
+    width: 10%;
+    height: 10%;
+    max-width: 30px;
+    max-height: 50px;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+.SpeedStyler {
+    flex-direction: row;
+    flex-shrink: 1;
+    flex-wrap: nowrap;
+    transform-origin: center;
+    -unity-text-align: upper-left;
+}
+
+.SpeedStyler > .unity-slider-int__label {
+    width: 80px;
+    height: 20%;
+    min-width: 20px;
+    min-height: 100%;
+    max-width: none;
+    max-height: none;
+    margin-left: -1px;
+    margin-right: -1px;
+    margin-top: -1px;
+    margin-bottom: -1px;
+    position: relative;
+    -unity-font-style: normal;
+    left: -4%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    padding-right: 10%;
+}
+
+.SpeedStyler > .unity-slider-int__input {
+    width: 143px;
+    min-width: 20px;
+    min-height: auto;
+    max-height: none;
+    max-width: 100px;
+    align-items: stretch;
+    justify-content: center;
+    left: -21%;
+}
