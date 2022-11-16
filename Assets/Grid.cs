@@ -18,6 +18,8 @@ public class Grid : MonoBehaviour
     [HideInInspector] public Color pathColor;
     [HideInInspector] public Color currColor;
 
+    private Coroutine _searchCoroutine;
+
     private Node startNode;
     private Node targetNode;
 
@@ -39,21 +41,32 @@ public class Grid : MonoBehaviour
         }
     }
 
+    public void clearGrid() {
+        startNode = null;
+        targetNode = null;
+        foreach(Node n in grid) {
+            n.isWalkable = true;
+            n.canChangeColor = true;
+            n.changeColor(defaultColor);
+        }
+    }
+
     public void startSearch() {
         Debug.Log("starting search");
-        StartCoroutine(findPath(startNode, targetNode));
+        _searchCoroutine = StartCoroutine(findPath(startNode, targetNode));
     }
 
     public void resetGrid() {
         foreach(Node n in grid) {
             if(n.isWalkable) n.changeColor(defaultColor);
         }
+        StopCoroutine(_searchCoroutine);
     }
 
     private void Start() {
         Camera cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        cam.gameObject.transform.position = new Vector3(((float) (xLength-1))/2.0f, 10f, ((float) (yLength-1))/2.0f);
-        cam.orthographicSize = (Mathf.Max(xLength, yLength) / 2) + 1;
+        cam.gameObject.transform.position = new Vector3(((float) (xLength-1))/2.0f, 10f, ((float) (yLength-1))/2.0f +3);
+        cam.orthographicSize = (Mathf.Max(xLength, yLength) / 2) + 4;
     }
 
     public Node getNodeFromList(Vector2Int posVec) {

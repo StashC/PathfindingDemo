@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 public class UIController : MonoBehaviour
 {
-
     public Button startButton;
     public Button resetButton;
     public Button walkableButton;
@@ -15,6 +14,7 @@ public class UIController : MonoBehaviour
 
     public SliderInt speedSlider;
 
+    private Master _master;
 
 
     void Start()
@@ -30,37 +30,38 @@ public class UIController : MonoBehaviour
 
         startButton.clicked += StartButtonPressed;
         resetButton.clicked += ResetButtonPressed;
-        walkableButton.clicked += WalkabeButtonPressed;
+        walkableButton.clicked += WalkableButtonPressed;
         setStartButton.clicked += SetStartButtonPresed;
         setTargetButton.clicked += SetTargetButtonPressed;
         clearButton.clicked += ClearButtonPressed;
 
         speedSlider = root.Q<SliderInt>("speed-slider");
-        
+
+        _master = GameObject.FindGameObjectWithTag("Master").GetComponent<Master>();        
     }
 
     void StartButtonPressed() {
-
+        _master.startSearch();
     }
     
     void ResetButtonPressed() {
-
+        _master.resetSearch();
     }
 
-    void WalkabeButtonPressed() {
-
+    void WalkableButtonPressed() {
+        _master.currButton = "ToggleWalkable";
     }
 
     void SetStartButtonPresed() {
-
+        _master.currButton = "SetStart";
     }
 
     void SetTargetButtonPressed() {
-
+        _master.currButton = "SetTarget";
     }
 
     void ClearButtonPressed() {
-
+        _master.clearGrid();
     }
 
 

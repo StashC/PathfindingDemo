@@ -19,11 +19,17 @@ public class Master : MonoBehaviour {
     public Color startColor;
     public Color targetColor;
 
-    public Vector2Int start;
-    public Vector2Int target;
+    private Vector2Int start;
+    private Vector2Int target;
     public GameObject NodePrefab;
 
+    // "ToggleWalkable", "SetStart", "SetTarget"
+    [HideInInspector]
+    public string currButton = "ToggleWalkable";
+
     private Camera cam;
+
+    public 
    
     // Start is called before the first frame update
     void Start() {
@@ -31,8 +37,6 @@ public class Master : MonoBehaviour {
         _theGrid = GameObject.FindGameObjectWithTag("Grid").GetComponent<Grid>();
         setGridColors();
         _theGrid.initGrid(NodePrefab, xLength, yLength);
-        setStartNode(_theGrid.getNodeFromList(start));
-        setTargetNode(_theGrid.getNodeFromList(target));
     }
 
     void setGridColors() {
@@ -45,11 +49,13 @@ public class Master : MonoBehaviour {
     }
 
     void toggleWalkable(Node node) {
+        if(node == null) return;
         node.isWalkable = !node.isWalkable;
         if(node.isWalkable) node.changeColor(defaultColor); else node.changeColor(unwalkableColor);
     }
 
     void setStartNode(Node startNode) {
+        if(startNode == null) return;
         if(start != null) {
             Node old = _theGrid.getNodeFromList(start);
             old.canChangeColor = true;
@@ -63,6 +69,7 @@ public class Master : MonoBehaviour {
     }
 
     void setTargetNode(Node targetNode) {
+        if(targetNode == null) return;
         if(target != null) {
             Node old = _theGrid.getNodeFromList(target);
             old.canChangeColor = true;
@@ -75,27 +82,53 @@ public class Master : MonoBehaviour {
         targetNode.canChangeColor = false;
     }
 
-    private void Update() {
-        if(run) {
-            _theGrid.startSearch();
-            run = false;
-        }
-
-        if(reset) {
-            _theGrid.resetGrid();
-            reset = false;
-        }
-
-        if(Input.GetMouseButtonDown(0)) {
-            Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-            Node clickedNode = getNodeClicked(mousePos);
-            toggleWalkable(clickedNode);
-        }
+    public void clearGrid() {
+        _theGrid.clearGrid();
     }
 
+    public void startSearch() {
+        _theGrid.startSearch();
+    }
+
+    public void resetSearch() {
+        _theGrid.resetGrid();
+    }
+
+        
+    private void Update() {
+        if(Input.GetMouseButtonDown(0)) {
+            handleClick();
+        }
+    }
+    private void handleClick() {
+        Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        try {
+            Node clickedNode = getNodeClicked(mousePos);
+            Debug.Log(clickedNode.XYPos);
+            Debug.Log(currButton);
+            if(clickedNode == null) return;
+            switch(currButton) {
+                case "ToggleWalkable":
+                    toggleWalkable(clickedNode);
+                    break;
+                case "SetStart":
+                    setStartNode(clickedNode);
+                    break;
+                case "SetTarget":
+                    setTargetNode(clickedNode);
+                    break;
+                default:
+                    break;
+            }
+        } catch {
+            // Debug.LogError("Couldnt get Node @ Pos: " + mousePos);
+            return;
+        }
+        
+    }
     Node getNodeClicked(Vector3 mouseWorldPos) {
         Vector2Int nodePos = new Vector2Int((int) mouseWorldPos.x, (int) mouseWorldPos.z);
-        Debug.Log("Clicked Node: " + nodePos + " world pos: " + mouseWorldPos);
+        // Debug.Log("Clicked Node: " + nodePos + " world pos: " + mouseWorldPos);
         return _theGrid.getNodeFromList(nodePos);
     }
 }

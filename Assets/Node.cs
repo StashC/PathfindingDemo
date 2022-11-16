@@ -9,7 +9,6 @@ public class Node : MonoBehaviour {
 
     private Color nodeColor;
     private int size;
-    private MeshRenderer renderer;
 
     [HideInInspector]
     public bool canChangeColor;
