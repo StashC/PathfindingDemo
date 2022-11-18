@@ -21,7 +21,7 @@ public class Master : MonoBehaviour {
 
     private Vector2Int start;
     private Vector2Int target;
-    public GameObject NodePrefab;
+    
 
     // "ToggleWalkable", "SetStart", "SetTarget"
     [HideInInspector]
@@ -29,14 +29,15 @@ public class Master : MonoBehaviour {
 
     private Camera cam;
 
-    public 
-   
-    // Start is called before the first frame update
     void Start() {
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         _theGrid = GameObject.FindGameObjectWithTag("Grid").GetComponent<Grid>();
         setGridColors();
-        _theGrid.initGrid(NodePrefab, xLength, yLength);
+        _theGrid.initGrid(xLength, yLength);
+    }
+
+    public void setRunSpeed(int nodesPerSecond) {
+        _theGrid.nodesPerSecond = nodesPerSecond;
     }
 
     void setGridColors() {
@@ -104,7 +105,7 @@ public class Master : MonoBehaviour {
         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         try {
             Node clickedNode = getNodeClicked(mousePos);
-            Debug.Log(clickedNode.XYPos);
+            Debug.Log("clickedNode.XYPos" + " hCost: " + clickedNode.hCost + " gCost: " + clickedNode.gCost);
             Debug.Log(currButton);
             if(clickedNode == null) return;
             switch(currButton) {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,9 +37,17 @@ public class UIController : MonoBehaviour
         clearButton.clicked += ClearButtonPressed;
 
         speedSlider = root.Q<SliderInt>("speed-slider");
+        speedSlider.RegisterCallback<ChangeEvent<int>>(changeSpeed);
 
         _master = GameObject.FindGameObjectWithTag("Master").GetComponent<Master>();        
     }
+
+    private void changeSpeed(ChangeEvent<int> evt) {
+        Debug.Log(evt.newValue);
+        _master.setRunSpeed(evt.newValue);
+    }
+
+ 
 
     void StartButtonPressed() {
         _master.startSearch();

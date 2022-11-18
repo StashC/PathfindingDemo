@@ -10,6 +10,7 @@ public class Grid : MonoBehaviour
     private List<Node> grid;
     public Transform Camera;
     public int nodeSize;
+    public GameObject NodePrefab;
 
     [HideInInspector] public Color defaultColor;
     [HideInInspector] public Color unwalkableColor;
@@ -18,6 +19,7 @@ public class Grid : MonoBehaviour
     [HideInInspector] public Color pathColor;
     [HideInInspector] public Color currColor;
 
+    [HideInInspector] public int nodesPerSecond;
     private Coroutine _searchCoroutine;
 
     private Node startNode;
@@ -27,7 +29,7 @@ public class Grid : MonoBehaviour
         return (pos.x + (pos.y * xLength));
     }
 
-    public void initGrid(GameObject NodePrefab, int xLen, int yLen) {
+    public void initGrid(int xLen, int yLen) {
         this.grid = new List<Node>();
         xLength = xLen; yLength = yLen;
         // Init the Grid
@@ -49,6 +51,13 @@ public class Grid : MonoBehaviour
             n.canChangeColor = true;
             n.changeColor(defaultColor);
         }
+    }
+
+    public void resizeGrid(int xLen, int yLen) {
+        clearGrid();
+        this.xLength = xLen;
+        this.yLength = yLen;
+        initGrid(this.xLength, this.yLength);
     }
 
     public void startSearch() {
@@ -99,9 +108,9 @@ public class Grid : MonoBehaviour
         int yGap = Mathf.Abs(a.y - b.y);
 
         if(xGap <= yGap) {
-            return 14 * xGap + (10 * (yGap - xGap));
+            return (14 * xGap) + (10 * (yGap - xGap));
         }
-        return 14 * yGap + (10 * (xGap - yGap));
+        return (14 * yGap) + (10 * (xGap - yGap));
     }
     
     IEnumerator findPath(Node start, Node target) {
@@ -111,7 +120,7 @@ public class Grid : MonoBehaviour
 
         //foreach(Node curr in Open) {
         while(Open.Count > 0) {
-            yield return new WaitForSecondsRealtime(0.025f);
+            yield return new WaitForSecondsRealtime(1/(float)nodesPerSecond);
             Node curr = findNextNode(Open);
             Open.Remove(curr);
             Closed.Add(curr);
@@ -126,7 +135,7 @@ public class Grid : MonoBehaviour
             foreach(Node neighbour in getNeighbours(curr)) {                
                 int newDistance = curr.gCost + getDistanceFromNode(curr.XYPos, neighbour.XYPos);
 
-                if(neighbour.isWalkable == false | ((Closed.Contains(neighbour) & newDistance >= neighbour.gCost))) {
+                if(neighbour.isWalkable == false | (Closed.Contains(neighbour) & newDistance >= neighbour.gCost)) {
                     //skip this neighbour.  
                     continue;
                 }
@@ -164,7 +173,7 @@ public class Grid : MonoBehaviour
         Node rsf = null;
         foreach(Node curr in nodes) {
             if(rsf == null) rsf = curr;
-            if(curr.getFCost() < rsf.getFCost()) {
+            if(curr.getFCost() < rsf.getFCost() | (curr.getFCost() == rsf.getFCost() && curr.gCost < rsf.gCost)) {
                 rsf = curr;
             }
         }

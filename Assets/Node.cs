@@ -15,7 +15,7 @@ public class Node : MonoBehaviour {
 
     public int gCost;
     public int hCost;
-    public int getFCost(){ return gCost = hCost; }
+    public int getFCost(){ return gCost + hCost; }
 
     public Node initNode(Vector2Int XYPos, bool isWalkable, int nodeSize, Color color) {
         this.XYPos = XYPos;
@@ -34,12 +34,11 @@ public class Node : MonoBehaviour {
     }
 
     public List<Node> getPath(List<Node> path) {
+        path.Add(this);
         if(parent == null) {
-            path.Add(this);
             return path;
         }
 
-        path.Add(this);
         return parent.getPath(path);
     }
 
