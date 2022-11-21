@@ -1,18 +1,19 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/toolbarIconButton.uss?fileID=7433441132597879392&amp;guid=b1fe14aeeee963e4bbce84ff82cdb80d&amp;type=3#toolbarIconButton" />
     <ui:VisualElement style="align-items: center;">
-        <ui:VisualElement name="toolBar" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; padding-bottom: 0.5%; flex-direction: row; height: 47px; width: 413px; background-color: rgba(223, 248, 255, 0.94);">
+        <ui:VisualElement name="toolBar" style="padding-left: 0.5%; padding-right: 0.5%; padding-top: 0.5%; padding-bottom: 0.5%; flex-direction: row; height: 47px; width: 447px; background-color: rgba(223, 248, 255, 0.94);">
             <ui:Button display-tooltip-when-elided="true" name="start-button" class="toolbar-icon-button" style="white-space: nowrap; -unity-text-align: middle-center; flex-basis: auto; left: 0; background-image: url(&apos;project://database/Assets/Icons.png?fileID=476273282&amp;guid=7744137a2465703468b00f4b7f56797a&amp;type=3#Icons_0&apos;); -unity-background-scale-mode: scale-to-fit;">
                 <ui:IMGUIContainer />
             </ui:Button>
             <ui:Button display-tooltip-when-elided="true" name="reset-button" class="toolbar-icon-button" style="background-image: url(&apos;project://database/Assets/Icons.png?fileID=1850479241&amp;guid=7744137a2465703468b00f4b7f56797a&amp;type=3#Icons_1&apos;);" />
             <ui:VisualElement name="sliderWrapper" style="width: 171px; height: 32px; justify-content: center; align-items: center;">
-                <ui:SliderInt picking-mode="Ignore" label="Speed" value="2" high-value="10" name="speed-slider" show-input-field="false" focusable="true" low-value="1" class="SpeedSlider SpeedStyler" style="width: 143px; display: flex; background-image: none;" />
+                <ui:SliderInt picking-mode="Ignore" label="Speed" value="5" high-value="20" name="speed-slider" show-input-field="false" focusable="true" low-value="1" class="SpeedSlider SpeedStyler" style="width: 143px; display: flex; background-image: none;" />
             </ui:VisualElement>
             <ui:Button display-tooltip-when-elided="true" name="walkable-button" class="toolbar-icon-button" style="background-image: url(&apos;project://database/Assets/Icons.png?fileID=1429415956&amp;guid=7744137a2465703468b00f4b7f56797a&amp;type=3#Icons_2&apos;);" />
             <ui:Button display-tooltip-when-elided="true" name="set-start-button" class="toolbar-icon-button" style="background-image: url(&apos;project://database/Assets/Icons.png?fileID=802980221&amp;guid=7744137a2465703468b00f4b7f56797a&amp;type=3#Icons_3&apos;);" />
             <ui:Button display-tooltip-when-elided="true" name="set-target-button" class="toolbar-icon-button" style="background-image: url(&apos;project://database/Assets/Icons.png?fileID=-255356742&amp;guid=7744137a2465703468b00f4b7f56797a&amp;type=3#Icons_4&apos;);" />
             <ui:Button display-tooltip-when-elided="true" name="clear-button" class="toolbar-icon-button" style="background-image: url(&apos;project://database/Assets/Icons.png?fileID=-1554409807&amp;guid=7744137a2465703468b00f4b7f56797a&amp;type=3#Icons_5&apos;);" />
+            <ui:Button display-tooltip-when-elided="true" name="generate-maze-button" class="toolbar-icon-button" style="background-image: url(&apos;project://database/Packages/com.unity.collab-proxy/Editor/PlasticSCM/Assets/Images/d_iconprivateoverlay@2x.png?fileID=21300000&amp;guid=7f854f490da24e54f9e8383e446b5d81&amp;type=3#d_iconprivateoverlay@2x&apos;);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

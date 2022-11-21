@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Grid : MonoBehaviour
@@ -62,6 +63,7 @@ public class Grid : MonoBehaviour
 
     public void startSearch() {
         Debug.Log("starting search");
+        StopAllCoroutines();
         _searchCoroutine = StartCoroutine(findPath(startNode, targetNode));
     }
 
@@ -89,15 +91,23 @@ public class Grid : MonoBehaviour
     }
 
     //List.count is defined as the count of items in the list.  Same is Length
-    List<Node> getNeighbours(Node n) {
+    List<Node> getNeighbours(Node n, bool moveDiag=true) {
         List<Node> neighbours = new List<Node>();
+
+        if(moveDiag == false) {
+            Vector2Int[] dirs = { new Vector2Int(-1, 0), new Vector2Int(1, 0), new Vector2Int(0, -1), new Vector2Int(0, 1) };
+            foreach(Vector2Int dir in dirs) {
+                Node neighbour = getNodeFromList(n.XYPos + dir);
+                if(neighbour != null) neighbours.Add(neighbour);                
+            }
+            return neighbours;
+        }
+
         for(int i = -1; i <= 1; i++) {
             for(int j = -1; j <= 1; j++) {
-                if(!(i == 0 & j == 0)) {
-                    Vector2Int newPosXY = new Vector2Int(n.XYPos.x + i, n.XYPos.y + j);
-                    Node neighbour = getNodeFromList(newPosXY);
-                    if(neighbour != null) neighbours.Add(neighbour);
-                }
+                Vector2Int newPosXY = new Vector2Int(n.XYPos.x + i, n.XYPos.y + j);
+                Node neighbour = getNodeFromList(newPosXY);
+                if(neighbour != null) neighbours.Add(neighbour);
             }
         }
         return neighbours;
@@ -146,13 +156,14 @@ public class Grid : MonoBehaviour
                     neighbour.parent = curr;
                     if(!Open.Contains(neighbour)){
                         Open.Add(neighbour);
-                    }
-                foreach(Node n in Open) n.changeColor(openColor);
-                foreach(Node n in Closed) n.changeColor(closedColor);
+                    }                
                 }
             }
+            foreach(Node n in Open) n.changeColor(openColor);
+            foreach(Node n in Closed) n.changeColor(closedColor);
         }
         //Indicate failure, couldn't find a path.  Target might be unreachable.
+        handleResults(null);
         yield break;
     }
 
@@ -187,6 +198,68 @@ public class Grid : MonoBehaviour
     public void setTargetNode(Node node) {
         targetNode = node;
         foreach(Node n in grid) n.hCost = getDistanceFromNode(n.XYPos, targetNode.XYPos);
+    }
+
+    public void genMaze() {
+        StopAllCoroutines();
+        StartCoroutine(generateMaze());
+    }
+
+    IEnumerator generateMaze() {
+        clearGrid();
+        Stack<Node> stack = new Stack<Node>();
+        foreach(Node n in grid) {
+            n.visited = false;
+            n.isWalkable = false;
+            n.changeColor(unwalkableColor);
+            n.canChangeColor = false;
+        }
+        //iterative approach
+        //instead of removing a wall, we will mark 2 blocks in the same direction as walkable.
+        //1
+        Node curr = grid[Random.Range(0, grid.Count)];
+        curr.visited = true;
+        stack.Push(curr);
+        //2
+        while(stack.Count != 0) {
+            yield return new WaitForSecondsRealtime(0.02f);
+            curr = stack.Pop(); //2.1
+            List<Node> unvisitedNeighbours = findMazeNext(curr);
+
+            if(unvisitedNeighbours.Count > 0) { //2.2
+                stack.Push(curr); //2.2.1
+                Node next = unvisitedNeighbours[Random.Range(0, unvisitedNeighbours.Count)]; //2.2.2
+                Node between = getNodeFromList(curr.XYPos + (next.XYPos - curr.XYPos) / 2);
+                //If there is a node behind the next node, we mark it as walkable aswell.  
+                Vector2Int dir = next.XYPos - curr.XYPos;
+                makePath(next, between);
+                stack.Push(next);
+                next.visited = true;
+            }
+        }
+        //generated maze.  
+
+        yield break;
+    }
+
+    void makePath(Node n, Node between) {
+        between.isWalkable = true;
+        between.canChangeColor = true;
+        between.changeColor(defaultColor);
+
+        n.isWalkable = true;
+        n.canChangeColor = true;
+        n.changeColor(defaultColor);
+    }
+
+    List<Node> findMazeNext(Node n) {
+        List<Node> neighbours = new List<Node>();
+        Vector2Int[] dirs = { new Vector2Int(-2, 0), new Vector2Int(2, 0), new Vector2Int(0, -2), new Vector2Int(0, 2) };
+        foreach(Vector2Int dir in dirs) {
+            Node neighbour = getNodeFromList(n.XYPos + dir);
+            if(neighbour != null) if(neighbour.visited == false) neighbours.Add(neighbour);
+        }
+        return neighbours;
     }
 }
 

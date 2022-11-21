@@ -348,8 +348,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   run: 0
   reset: 1
-  xLength: 20
-  yLength: 20
+  xLength: 50
+  yLength: 50
   defaultColor: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 0}
   unwalkableColor: {r: 0.084905684, g: 0.084905684, b: 0.084905684, a: 0}
   openColor: {r: 0, g: 0.7432457, b: 0.7924528, a: 0}
@@ -458,6 +458,7 @@ MonoBehaviour:
   closedColor: {r: 1, g: 0.20382687, b: 0, a: 0}
   pathColor: {r: 0, g: 0.6484008, b: 1, a: 0}
   currColor: {r: 1, g: 1, b: 1, a: 0}
+  nodesPerSecond: 0
 --- !u!4 &1839641923
 Transform:
   m_ObjectHideFlags: 0

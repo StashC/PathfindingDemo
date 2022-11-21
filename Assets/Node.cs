@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Node : MonoBehaviour {
+    [Header("Shared")]
     public Vector2Int XYPos;
-    public bool isWalkable;
-    public Node parent;
-
     private Color nodeColor;
-    private int size;
-
-    [HideInInspector]
     public bool canChangeColor;
-
+    private int size;
+    
+    //Astar
+    [HideInInspector]
     public int gCost;
     public int hCost;
     public int getFCost(){ return gCost + hCost; }
+    public bool isWalkable;
+    public Node parent;
+
+    //MazeGeneration 
+    public bool visited;
 
     public Node initNode(Vector2Int XYPos, bool isWalkable, int nodeSize, Color color) {
         this.XYPos = XYPos;

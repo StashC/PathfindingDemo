@@ -6,12 +6,13 @@ using UnityEngine.UIElements;
 
 public class UIController : MonoBehaviour
 {
-    public Button startButton;
-    public Button resetButton;
-    public Button walkableButton;
-    public Button setStartButton;
-    public Button setTargetButton;
-    public Button clearButton;
+    private Button startButton;
+    private Button resetButton;
+    private Button walkableButton;
+    private Button setStartButton;
+    private Button setTargetButton;
+    private Button clearButton;
+    private Button genMazeButton;
 
     public SliderInt speedSlider;
 
@@ -21,13 +22,14 @@ public class UIController : MonoBehaviour
     void Start()
     {
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
-
-        startButton     = root.Q<Button>("start-button");
+        _master = GameObject.FindGameObjectWithTag("Master").GetComponent<Master>();
+        startButton = root.Q<Button>("start-button");
         resetButton     = root.Q<Button>("reset-button");
         walkableButton  = root.Q<Button>("walkable-button");
         setStartButton  = root.Q<Button>("set-start-button");
         setTargetButton = root.Q<Button>("set-target-button");
         clearButton     = root.Q<Button>("clear-button");
+        genMazeButton = root.Q<Button>("generate-maze-button");
 
         startButton.clicked += StartButtonPressed;
         resetButton.clicked += ResetButtonPressed;
@@ -35,11 +37,11 @@ public class UIController : MonoBehaviour
         setStartButton.clicked += SetStartButtonPresed;
         setTargetButton.clicked += SetTargetButtonPressed;
         clearButton.clicked += ClearButtonPressed;
+        genMazeButton.clicked += GenMazeButtonPressed;
 
         speedSlider = root.Q<SliderInt>("speed-slider");
         speedSlider.RegisterCallback<ChangeEvent<int>>(changeSpeed);
-
-        _master = GameObject.FindGameObjectWithTag("Master").GetComponent<Master>();        
+        _master.setRunSpeed(speedSlider.value);
     }
 
     private void changeSpeed(ChangeEvent<int> evt) {
@@ -71,6 +73,10 @@ public class UIController : MonoBehaviour
 
     void ClearButtonPressed() {
         _master.clearGrid();
+    }
+
+    void GenMazeButtonPressed() {
+        _master.genMaze();
     }
 
 

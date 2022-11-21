@@ -87,6 +87,10 @@ public class Master : MonoBehaviour {
         _theGrid.clearGrid();
     }
 
+    public void genMaze() {
+        _theGrid.genMaze();
+    }
+
     public void startSearch() {
         _theGrid.startSearch();
     }
